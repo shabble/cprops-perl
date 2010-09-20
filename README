@@ -1,0 +1,16 @@
+A Perl interface for some of the data-structures provided by the cprops library
+(http://cprops.sourceforge.net/)
+
+Currently only implements the Trie structure, but future plans may include
+AVL and RB trees if there is any demand.
+
+Perl has good vector (array) and hashtable (hash) support already, so there's
+no real point supporting those.
+
+
+TODO:
+-----
+
+* Make it more portable (currently has library paths hardcoded)
+* Write POD documentation for module API
+* Figure out what's necessary to place it on CPAN
