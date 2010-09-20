@@ -7,7 +7,8 @@ use Inline C
 #  => PREFIX => 'cp_'
   => TYPEMAPS => getcwd() . "/typemap"
   => MYEXTLIB => '/opt/local/lib/libcprops.dylib'
-  => INC => '/opt/local/include/cprops';
+  => INC => '/opt/local/include/cprops'
+  => FORCE_BUILD => 1;
 
 use Inline 'C' => 'src/cprops.c';
 
