@@ -17,23 +17,23 @@ class CProps::Trie {
         return CProps::trie_create();
     }
 
-    method add($key, $val) {
+    method add(Str $key, $val) {
         return CProps::trie_add($self->_trie, $key, $val);
     }
 
-    method remove($key) {
+    method remove(Str $key) {
         return CProps::trie_remove($self->_trie, $key);
     }
 
-    method prefixes($key) {
+    method prefixes(Str $key) {
         return CProps::trie_prefixes($self->_trie, $key);
     }
 
-    method prefix_match($key) {
+    method prefix_match(Str $key) {
         return CProps::trie_prefix_match($self->_trie, $key);
     }
 
-    method match($key) {
+    method match(Str $key) {
         return CProps::trie_exact_match($self->_trie, $key);
     }
 

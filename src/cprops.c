@@ -16,9 +16,12 @@ int trie_destroy(cp_trie *trie) {
     return cp_trie_destroy(trie);
 }
 
-SV* trie_add(cp_trie *trie, char *key, char *val) {
+SV* trie_add(cp_trie *trie, char *key, SV *val) {
+    void *value;
 
-    int ret = cp_trie_add(trie, strdup(key), strdup(val));
+    value = (void *) newRV_inc(val);
+
+    int ret = cp_trie_add(trie, savepv(key), value);
 
     if (ret == 0) {
         return newSViv(1);
@@ -28,11 +31,11 @@ SV* trie_add(cp_trie *trie, char *key, char *val) {
 }
 
 SV* trie_remove(cp_trie *trie, char *key) {
-    char *removed;
-    int ret = cp_trie_remove(trie, key, &removed);
-    //printf("ret is %d and removed is %s\n", ret, removed);
-    if (ret == 1 && removed != NULL) {
-        return newSVpv(removed, strlen(removed));
+    void *node;
+    int ret = cp_trie_remove(trie, key, &node);
+    if (ret == 1 && node != NULL) {
+        SV *sv = (SV *)node;
+        return SvRV(sv);
     } else {
         return newSV(0);
     }
@@ -42,11 +45,12 @@ void trie_prefix_match(cp_trie *trie, char *prefix) {
     Inline_Stack_Vars;
     Inline_Stack_Reset;
 
-    char *node;
+    void *node;
     int ret = cp_trie_prefix_match(trie, prefix, &node);
     if (ret) {
+        SV* sv = (SV *)node;
         Inline_Stack_Push(sv_2mortal(newSViv(ret)));
-        Inline_Stack_Push(sv_2mortal(newSVpv(node, strlen(node))));
+        Inline_Stack_Push(SvRV(sv));
     } else {
         Inline_Stack_Push(sv_2mortal(newSV(0)));
     }
@@ -56,10 +60,11 @@ void trie_prefix_match(cp_trie *trie, char *prefix) {
 }
 
 SV* trie_exact_match(cp_trie *trie, char *key) {
-    char *match;
+    void *match;
     match = cp_trie_exact_match(trie, key);
     if (match != NULL) {
-        return newSVpv(match, strlen(match));
+        SV* sv = (SV *)match;
+        return SvRV(sv);
     } else {
         return newSV(0);
     }
@@ -79,8 +84,8 @@ void trie_prefixes(cp_trie *trie, char *search) {
         int sz = cp_vector_size(v);
         int i;
         for (i = 0; i < sz; i++) {
-            char *str = (char *)cp_vector_element_at(v, i);
-            Inline_Stack_Push(sv_2mortal(newSVpv(str, strlen(str))));
+            SV *sv = (SV *)cp_vector_element_at(v, i);
+            Inline_Stack_Push(SvRV(sv));
         }
     }
 

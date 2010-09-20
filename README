@@ -12,5 +12,7 @@ TODO:
 -----
 
 * Make it more portable (currently has library paths hardcoded)
+* Allow node values to be arbitrary perl types (currently just strings)
+** First stab at this, seems to work but need to check out the mem management. 
 * Write POD documentation for module API
 * Figure out what's necessary to place it on CPAN

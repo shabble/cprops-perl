@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Test::More;
+use Test::Exception;
 
 #use CProps;
 use Data::Dumper;
@@ -56,41 +57,14 @@ is($trie->match("bar"), 'horse');
 # }
 # sleep 10;
 
+#throws_ok(sub {
+ok($trie->add("wombat", [qw/1 2 3/]));
+my $ret = $trie->match("wombat");
+
+isa_ok($ret, 'ARRAY');
+is_deeply($ret, [qw/1 2 3/]);
+
+ok($trie->add("wombat", 'bacon'));
+is($trie->match("wombat"), 'bacon');
+
 done_testing;
-
-# my $trie = CProps::trie_create();
-# #CProps::trie_add($trie, "a", "a");
-# #CProps::trie_add($trie, "ab", "ab");
-# #CProps::trie_add($trie, "abc", "abc");
-
-# add($trie, qw/moo moose moomoo moocow m mo moosey/);
-
-# my @foo = CProps::trie_prefixes($trie, 'moos');
-# print Dumper(\@foo), "\n";
-# my $ret = CProps::trie_destroy($trie);
-# print "Destroy: $ret\n";
-
-
-# sub add {
-#     my ($trie, @things) = @_;
-#     for my $thing (@things) {
-#         print "Adding: $thing\n";
-#         CProps::trie_add($trie, $thing, $thing);
-#     }
-# }
-
-# #CProps::spam($trie, "abc");
-
-# #print Dumper($trie);
-
-# #my $trie = bacon::trie_create(0);
-
-
-# # => q{
-# #undef die
-# #cp_trie* cp_trie_create(int);
-# #
-# #};
-
-
-
