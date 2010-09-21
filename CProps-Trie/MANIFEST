@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/CProps-Trie.t
+lib/CProps/Trie.pm
