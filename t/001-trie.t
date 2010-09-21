@@ -46,8 +46,8 @@ $trie->add('mon', 'mon');
 is($count, 2);
 is($closest, 'mon');
 
-ok(!$trie->match("banana"));
-is($trie->match("bar"), 'horse');
+ok(!$trie->get("banana"));
+is($trie->get("bar"), 'horse');
 
 # how to test for memory leaks?
 
@@ -59,12 +59,26 @@ is($trie->match("bar"), 'horse');
 
 #throws_ok(sub {
 ok($trie->add("wombat", [qw/1 2 3/]));
-my $ret = $trie->match("wombat");
+my $ret = $trie->get("wombat");
 
 isa_ok($ret, 'ARRAY');
 is_deeply($ret, [qw/1 2 3/]);
 
 ok($trie->add("wombat", 'bacon'));
-is($trie->match("wombat"), 'bacon');
+is($trie->get("wombat"), 'bacon');
+
+is(scalar $trie->keys, $trie->size);
+
+
+my $new_trie = CProps::Trie->new;
+ok($new_trie->add(100, "moo"));
+is($new_trie->size, 1);
+is($new_trie->get(100), "moo");
+
+my @keys = $new_trie->keys;
+is_deeply(\@keys, [100]);
+
+my @foo = $trie->children("");
+diag Dumper \@foo;
 
 done_testing;

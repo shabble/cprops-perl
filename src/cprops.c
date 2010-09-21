@@ -16,6 +16,10 @@ int trie_destroy(cp_trie *trie) {
     return cp_trie_destroy(trie);
 }
 
+int trie_count(cp_trie *trie) {
+    return cp_trie_count(trie);
+}
+
 SV* trie_add(cp_trie *trie, char *key, SV *val) {
     void *value;
 
@@ -68,6 +72,30 @@ SV* trie_exact_match(cp_trie *trie, char *key) {
     } else {
         return newSV(0);
     }
+}
+
+void trie_submatch(cp_trie *trie, char *key) {
+
+    Inline_Stack_Vars;
+    Inline_Stack_Reset;
+
+    cp_vector *v = cp_trie_submatch(trie, key);
+
+    if (v == NULL) {
+        // add an undef to the stack as a failure marker.
+        Inline_Stack_Push(sv_2mortal(newSV(0)));
+    } else {
+        int sz = cp_vector_size(v);
+        int i;
+        for (i = 0; i < sz; i++) {
+            SV *sv = (SV *)cp_vector_element_at(v, i);
+            Inline_Stack_Push(SvRV(sv));
+        }
+    }
+
+    Inline_Stack_Done;
+    return;
+    
 }
 
 void trie_prefixes(cp_trie *trie, char *search) {
