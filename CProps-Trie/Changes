@@ -1,6 +1,0 @@
-Revision history for Perl extension CProps::Trie.
-
-0.1  Tue Sep 21 23:05:39 2010
-	- original version; created by h2xs 1.23 with options
-		-AX -n CProps::Trie -v 0.1
-
