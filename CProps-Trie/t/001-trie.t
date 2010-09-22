@@ -58,16 +58,17 @@ is($trie->get("bar"), 'horse');
 # sleep 10;
 
 #throws_ok(sub {
-ok($trie->add("wombat", [qw/1 2 3/]));
-my $ret = $trie->get("wombat");
+ok($trie->add("array", [qw/1 2 3/]));
+my $ret = $trie->get("array");
 
 isa_ok($ret, 'ARRAY');
 is_deeply($ret, [qw/1 2 3/]);
 
-ok($trie->remove('wombat'));
+my $foo =  ok($trie->remove('array'));
+diag Dumper($foo);
 
-ok($trie->add("wombat", 'bacon'));
-is($trie->get("wombat"), 'bacon');
+ok($trie->add("array", 'SCALAR'));
+is($trie->get("array"), 'SCALAR');
 
 #is(scalar $trie->keys, $trie->size);
 
@@ -81,11 +82,14 @@ my @keys = $new_trie->keys;
 is_deeply(\@keys, [100]);
 
 my $del_trie = new_ok 'CProps::Trie';
-ok($del_trie->add("x", "y"));
-ok($del_trie->add("x", "z"));
+ok($del_trie->add("x", { moo => 'rar' }));
+ok($del_trie->add('y', [qw/a b c/]));
+
+#ok($del_trie->add("x", "z"));
 ok($del_trie->add("a", "b"));
 
 ok($del_trie->remove('x'));
+ok($del_trie->remove('y'));
 
 
 
