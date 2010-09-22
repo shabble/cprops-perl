@@ -8,6 +8,7 @@ use Test::Exception;
 
 use Data::Dumper;
 use Devel::Peek qw/Dump DumpArray/;
+use Devel::FindRef;
 
 BEGIN {
     use_ok 'CProps::Trie';
@@ -15,6 +16,35 @@ BEGIN {
 
 
 my $trie = new_ok 'CProps::Trie';
+
+my $str = "test";
+my $key = 'a';
+
+#print Devel::FindRef::track \$key;
+#print Devel::FindRef::track \$str;
+$trie->add($key, $str);
+#print Devel::FindRef::track \$str;
+
+#$trie->add('x', 2);
+
+
+my $str2;
+ok($str2 = $trie->get('a'));
+ok($str2 = $trie->get('a'));
+ok($str2 = $trie->get('a'));
+
+#print Devel::FindRef::track \$str;
+
+Dump($str2);
+my $str3 = $trie->remove('a');
+Dump($str3);
+
+done_testing;
+exit 0;
+
+
+
+
 my $arr = [qw/1 2 3/];
 ok($trie->add("array", $arr));
 Dump($arr);
