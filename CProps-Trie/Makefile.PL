@@ -20,7 +20,7 @@ WriteMakefile(
                                    },
               dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
               clean               => {
-                                      FILES => 'CProps-Trie-* Trie.inl _Inline Trie.pm'
+                                      FILES => 'CProps-Trie-* Trie.inl _Inline'
                                      },
              );
 

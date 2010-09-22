@@ -1,1 +1,6 @@
 _Inline/
+/CProps-Trie/Makefile
+/CProps-Trie/Trie.inl
+/CProps-Trie/Trie.pm
+/CProps-Trie/blib/
+/CProps-Trie/pm_to_blib

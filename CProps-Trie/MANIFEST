@@ -1,5 +1,6 @@
 Makefile.PL
 MANIFEST
+MANIFEST.SKIP
 README
 t/001-trie.t
 lib/CProps/Trie.pm
