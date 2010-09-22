@@ -25,87 +25,11 @@ int _trie_destroy(cp_trie *trie) {
     return cp_trie_destroy(trie);
 }
 
-int _trie_count(cp_trie *trie) {
-    return cp_trie_count(trie);
-}
-
-SV* _trie_add(cp_trie *trie, SV *key, SV *val) {
 
 
-    char *key_copy = savesvpv(key);
-
-    printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val));
-
-    SvREFCNT_inc(val);
-    SvREFCNT_inc(val);
-
-    printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val));
-    int ret = cp_trie_add(trie, key_copy, val);
-
-    //cp_trie_dump(trie);
-    if (ret == 0) {
-        return newSViv(1);
-    } else {
-        return newSV(0);
-    }
-}
-
-SV* _trie_remove(cp_trie *trie, char *key) {
-    void *node;
-    int ret = cp_trie_remove(trie, strdup(key), &node);
-    //cp_trie_dump(trie);
-
-    /* success?! according to docs, 0 is success but code appears to show that
-     * 1 is success */
-    if (ret == 1) {
-        if (node != NULL) {
-            SV *sv_node = (SV *)node;
-            printf("Remove: Ref count of value (%p) is: %d\n", sv_node,
-                   SvREFCNT(sv_node));
-            SvREFCNT_dec(sv_node);
-            printf("Remove: Ref count of value (%p) is: %d\n", sv_node,
-                   SvREFCNT(sv_node));
-            return sv_node;
-        } else {
-            printf("Remove succeeded but node NULL\n");
-            return newSV(0);
-        }
-    } else {
-        printf("Remove %s failed?\n", key);
-        return newSV(0);
-    }
-}
 
 
-void _trie_prefix_match(cp_trie *trie, char *prefix) {
-    /* Inline_Stack_Vars; */
-    /* Inline_Stack_Reset; */
 
-    /* void *node; */
-    /* int ret = cp_trie_prefix_match(trie, prefix, &node); */
-    /* if (ret) { */
-    /*     SV* sv = (SV *)node; */
-    /*     Inline_Stack_Push(sv_2mortal(newSViv(ret))); */
-    /*     Inline_Stack_Push(sv); */
-    /* } else { */
-    /*     Inline_Stack_Push(sv_2mortal(newSV(0))); */
-    /* } */
-
-    /* Inline_Stack_Done; */
-    return;
-}
-
-SV* _trie_exact_match(cp_trie *trie, char *key) {
-    SV *node;
-    node = (SV *)cp_trie_exact_match(trie, key);
-    if (node != NULL) {
-        printf("Get: Ref count of value (%p) is: %d\n", node, SvREFCNT(node));
-        SvREFCNT_inc(node); // WHY!?!?!?
-        return node;
-    } else {
-        return newSV(0);
-    }
-}
 
 void _trie_submatch(cp_trie *trie, char *key) {
 
@@ -169,17 +93,83 @@ _trie_destroy (trie)
 int
 _trie_count (trie)
 	cp_trie *	trie
+CODE:
+    RETVAL = cp_trie_count(trie);
+OUTPUT:
+    RETVAL
+
 
 SV *
 _trie_add (trie, key, val)
 	cp_trie *	trie
 	SV *	key
 	SV *	val
+CODE:
+    char *key_copy = savesvpv(key);
+
+    printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val));
+    SvREFCNT_inc(val);
+    printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val));
+    int ret = cp_trie_add(trie, key_copy, val); 
+
+    if (ret == 0) {
+        RETVAL = newSViv(1);
+    } else {
+        RETVAL = newSV(0);
+    }
+OUTPUT:
+    RETVAL
+
+
+SV *
+_trie_exact_match (trie, key)
+	cp_trie *	trie
+	char *	key
+CODE:
+    SV *node;
+    node = (SV *)cp_trie_exact_match(trie, key);
+    if (node != NULL) {
+        printf("Get: Ref count of value (%p) is: %d\n", node, SvREFCNT(node));
+
+        RETVAL = SvREFCNT_inc(node);
+    } else {
+        RETVAL = newSV(0);
+    }
+OUTPUT:
+    RETVAL
+
 
 SV *
 _trie_remove (trie, key)
 	cp_trie *	trie
-	char *	key
+    SV *	key
+CODE:
+    void *node;
+    int ret = cp_trie_remove(trie, savesvpv(key), &node);
+
+    /* success?! according to docs, 0 is success but code appears to show that
+     * 1 is success */
+
+    if (ret == 1) {
+        if (node != NULL) {
+            SV *sv_node = (SV *)node;
+            printf("Remove: Ref count of value (%p) is: %d\n", sv_node,
+                   SvREFCNT(sv_node));
+            // gets mortalised anyway, so no need to decrement.
+            // SvREFCNT_dec(sv_node);
+            /* printf("Remove: Ref count of value (%p) is: %d\n", sv_node, */
+            /*        SvREFCNT(sv_node)); */
+            RETVAL = sv_node;
+        } else {
+            printf("Remove succeeded but node NULL\n");
+            RETVAL = newSV(0);
+        }
+    } else {
+        printf("Remove %s failed?\n", key);
+        RETVAL = newSV(0);
+    }
+OUTPUT:
+     RETVAL
 
 void
 _trie_prefix_match (trie, prefix)
@@ -198,10 +188,6 @@ _trie_prefix_match (trie, prefix)
         /* must have used dXSARGS; list context implied */
 	return; /* assume stack size is correct */
 
-SV *
-_trie_exact_match (trie, key)
-	cp_trie *	trie
-	char *	key
 
 void
 _trie_submatch (trie, key)
