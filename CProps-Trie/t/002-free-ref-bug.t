@@ -20,10 +20,23 @@ my $trie = new_ok 'CProps::Trie';
 my $str = "test";
 my $key = 'a';
 
+print "Key: \n";
+Dump($key);
+print "----------------------------\n\n";
+print "Str: \n";
+Dump($str);
+print "----------------------------\n\n";
+
 #print Devel::FindRef::track \$key;
 #print Devel::FindRef::track \$str;
 $trie->add($key, $str);
 #print Devel::FindRef::track \$str;
+print "Key: \n";
+Dump($key);
+print "----------------------------\n\n";
+print "Str: \n";
+Dump($str);
+print "----------------------------\n\n";
 
 #$trie->add('x', 2);
 
@@ -32,6 +45,7 @@ my $str2;
 ok($str2 = $trie->get('a'));
 ok($str2 = $trie->get('a'));
 ok($str2 = $trie->get('a'));
+is($str2, $str);
 
 #print Devel::FindRef::track \$str;
 
