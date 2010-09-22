@@ -4,5 +4,5 @@ MANIFEST.SKIP
 README
 t/001-trie.t
 lib/CProps/Trie.pm
-src/cprops.c
-src/typemap
+Trie.xs
+typemap

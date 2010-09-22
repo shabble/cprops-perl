@@ -2,19 +2,22 @@ use strictures 1;
 
 package CProps::Trie;
 
-$CProps::Trie::VERSION = '0.01';
+our $VERSION = '0.01';
 
-use Inline (
-            C           => './src/cprops.c',
-            NAME        => 'CProps::Trie',
-            VERSION     => '0.01',
-            TYPEMAPS    => "./src/typemap",
-            LIBS        => '-L/opt/local/lib -lcprops',
-            INC         => '/opt/local/include/cprops',
-            FORCE_BUILD => 1,
-           );
+require XSLoader;
+XSLoader::load('CProps::Trie', $VERSION);
 
-Inline->init();
+# use Inline (
+#             C           => './src/cprops.c',
+#             NAME        => 'CProps::Trie',
+#             VERSION     => '0.01',
+#             TYPEMAPS    => "./src/typemap",
+#             LIBS        => '-L/opt/local/lib -lcprops',
+#             INC         => '/opt/local/include/cprops',
+#             FORCE_BUILD => 1,
+#            );
+
+# Inline->init();
 
 use MooseX::Declare;
 
