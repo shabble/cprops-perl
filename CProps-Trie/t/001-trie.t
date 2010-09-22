@@ -6,13 +6,13 @@ use warnings;
 use Test::More;
 use Test::Exception;
 
-#use CProps;
 use Data::Dumper;
-#CProps::greet();
+
 BEGIN {
-    use lib '.';
     use_ok 'CProps::Trie';
 }
+
+
 my $trie = new_ok 'CProps::Trie';
 can_ok($trie, 'add', 'prefixes');
 
@@ -64,10 +64,12 @@ my $ret = $trie->get("wombat");
 isa_ok($ret, 'ARRAY');
 is_deeply($ret, [qw/1 2 3/]);
 
+ok($trie->remove('wombat'));
+
 ok($trie->add("wombat", 'bacon'));
 is($trie->get("wombat"), 'bacon');
 
-is(scalar $trie->keys, $trie->size);
+#is(scalar $trie->keys, $trie->size);
 
 
 my $new_trie = CProps::Trie->new;
@@ -78,7 +80,21 @@ is($new_trie->get(100), "moo");
 my @keys = $new_trie->keys;
 is_deeply(\@keys, [100]);
 
+my $del_trie = new_ok 'CProps::Trie';
+ok($del_trie->add("x", "y"));
+ok($del_trie->add("x", "z"));
+ok($del_trie->add("a", "b"));
+
+ok($del_trie->remove('x'));
+
+
+
+
+
 my @foo = $trie->children("");
-diag Dumper \@foo;
+
+
+
+#diag Dumper \@foo;
 
 done_testing;

@@ -41,43 +41,43 @@ class CProps::Trie is dirty {
          );
 
     method _build_trie {
-        return CProps::trie_create();
+        return _trie_create();
     }
 
     method size() {
-        return CProps::trie_count($self->_trie);
+        return _trie_count($self->_trie);
     }
 
     method add(Str $key, $val) {
-        my $ret = CProps::trie_add($self->_trie, $key, $val);
+        my $ret = _trie_add($self->_trie, $key, $val);
         $self->_keys->{$key} = 1 if $ret;
         return $ret;
     }
 
     method remove(Str $key) {
-        my $ret = CProps::trie_remove($self->_trie, $key);
+        my $ret = _trie_remove($self->_trie, $key);
         delete $self->_keys->{$key} if $ret;
         return $ret;
     }
 
     method prefixes(Str $key) {
-        return CProps::trie_prefixes($self->_trie, $key);
+        return _trie_prefixes($self->_trie, $key);
     }
 
     method prefix_match(Str $key) {
-        return CProps::trie_prefix_match($self->_trie, $key);
+        return _trie_prefix_match($self->_trie, $key);
     }
 
     method get(Str $key) {
-        return CProps::trie_exact_match($self->_trie, $key);
+        return _trie_exact_match($self->_trie, $key);
     }
 
     method children(Str $key) {
-        return CProps::trie_submatch($self->_trie, $key);
+        return _trie_submatch($self->_trie, $key);
     }
 
     method DEMOLISH {
-        CProps::trie_destroy($self->_trie);
+        _trie_destroy($self->_trie);
     }
 
 }

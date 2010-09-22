@@ -7,20 +7,20 @@
 
 // Docs: http://cprops.sourceforge.net/cp_trie.3.html
 
-cp_trie *trie_create() {
+cp_trie *_trie_create() {
     cp_trie *new = cp_trie_create(COLLECTION_MODE_NOSYNC);
     return new;
 }
 
-int trie_destroy(cp_trie *trie) {
+int _trie_destroy(cp_trie *trie) {
     return cp_trie_destroy(trie);
 }
 
-int trie_count(cp_trie *trie) {
+int _trie_count(cp_trie *trie) {
     return cp_trie_count(trie);
 }
 
-SV* trie_add(cp_trie *trie, char *key, SV *val) {
+SV* _trie_add(cp_trie *trie, char *key, SV *val) {
     void *value;
 
     value = (void *) newRV_inc(val);
@@ -34,7 +34,7 @@ SV* trie_add(cp_trie *trie, char *key, SV *val) {
     }
 }
 
-SV* trie_remove(cp_trie *trie, char *key) {
+SV* _trie_remove(cp_trie *trie, char *key) {
     void *node;
     int ret = cp_trie_remove(trie, key, &node);
     if (ret == 1 && node != NULL) {
@@ -45,7 +45,7 @@ SV* trie_remove(cp_trie *trie, char *key) {
     }
 }
 
-void trie_prefix_match(cp_trie *trie, char *prefix) {
+void _trie_prefix_match(cp_trie *trie, char *prefix) {
     Inline_Stack_Vars;
     Inline_Stack_Reset;
 
@@ -63,7 +63,7 @@ void trie_prefix_match(cp_trie *trie, char *prefix) {
     return;
 }
 
-SV* trie_exact_match(cp_trie *trie, char *key) {
+SV* _trie_exact_match(cp_trie *trie, char *key) {
     void *match;
     match = cp_trie_exact_match(trie, key);
     if (match != NULL) {
@@ -74,7 +74,7 @@ SV* trie_exact_match(cp_trie *trie, char *key) {
     }
 }
 
-void trie_submatch(cp_trie *trie, char *key) {
+void _trie_submatch(cp_trie *trie, char *key) {
 
     Inline_Stack_Vars;
     Inline_Stack_Reset;
@@ -98,7 +98,7 @@ void trie_submatch(cp_trie *trie, char *key) {
     
 }
 
-void trie_prefixes(cp_trie *trie, char *search) {
+void _trie_prefixes(cp_trie *trie, char *search) {
 
     Inline_Stack_Vars;
     Inline_Stack_Reset;
@@ -119,14 +119,4 @@ void trie_prefixes(cp_trie *trie, char *search) {
 
     Inline_Stack_Done;
     return;
-}
-
-void spam(cp_trie *trie, char *match) {
-    cp_vector *v = cp_trie_fetch_matches(trie, match);
-    int sz = cp_vector_size(v);
-    int i;
-    for (i = 0; i < sz; i++) {
-        char *str = (char *)cp_vector_element_at(v, i);
-        printf("Prefix: %s\n", str);
-    }
 }
