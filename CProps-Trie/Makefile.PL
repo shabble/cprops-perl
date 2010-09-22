@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Cwd;
-use Inline::MakeMaker;
+use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 WriteMakefile(
@@ -10,6 +10,10 @@ WriteMakefile(
               VERSION_FROM      => 'lib/CProps/Trie.pm', # finds $VERSION
               ABSTRACT_FROM     => 'lib/CProps/Trie.pm',
               PL_FILES          => {},
+              LIBS              => ["-L/opt/local/lib -lcprops"],
+              INC               => "-I/opt/local/include/cprops",
+#              XS                => { 'src/Trie.xs' => 'src/Trie.c' },
+#              TYPEMAPS          => [ 'src/typemap' ],
               PREREQ_PM         => {
                                     'Test::More'        => 0,
                                     'Inline'            => 0,
@@ -28,7 +32,7 @@ WriteMakefile(
 # filthy hack. Fix Inline::MakeMaker to use actual documented APIs
 # and not just open teh makefile afterwards.
 
-unless (-e './Trie.pm') {
-    system 'ln', '-s', './lib/CProps/Trie.pm', 'Trie.pm';
-    print "Fixed your damn location\n";
-}
+# unless (-e './Trie.pm') {
+#     system 'ln', '-s', './lib/CProps/Trie.pm', 'Trie.pm';
+#     print "Fixed your damn location\n";
+# }

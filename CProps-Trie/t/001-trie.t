@@ -96,6 +96,8 @@ ok($del_trie->remove('y'));
 
 
 my @foo = $trie->children("");
+diag(join ',', @foo);
+is(scalar @foo, 0);
 
 
 
