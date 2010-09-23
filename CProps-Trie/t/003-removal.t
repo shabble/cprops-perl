@@ -7,7 +7,7 @@ use Test::More;
 use Test::Exception;
 
 use Data::Dumper;
-use Devel::Peek qw/Dump DumpArray/;
+#use Devel::Peek qw/Dump DumpArray/;
 
 BEGIN {
     use_ok 'CProps::Trie';

@@ -60,13 +60,17 @@ WriteMakefile(
 sub header_loc {
     my $dir = header_found();
     die "Still can't find headers" unless $dir;
-    return "-I" . $dir . "/cprops";
+    my $loc =  "-I" . $dir . "/cprops";
+    print "Header location is: $loc\n";
+    return $loc;
 }
 
 sub lib_loc {
     my $dir = lib_found();
     die "Still can't find library" unless $dir;
-    return "-L" . $dir . " -lcprops";
+    my $loc = "-L" . $dir . " -lcprops";
+    print "Library location is: $loc\n";
+    return $loc;
 }
 
 sub header_found {

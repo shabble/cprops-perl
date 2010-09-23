@@ -7,7 +7,7 @@ use Test::More;
 use Test::Exception;
 
 use Data::Dumper;
-use Devel::Peek qw/Dump DumpArray SvREFCNT/;
+#use Devel::Peek qw/Dump DumpArray SvREFCNT/;
 # use Devel::FindRef;
 
 BEGIN {
