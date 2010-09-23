@@ -97,7 +97,7 @@ CProps::Trie - Perl interface to the I<cprops> C-Prototypes Trie implementation
 
 =head1 DESCRIPTION
 
-This module provides a fast XS interface to a trie datastructure. 
+This module provides a fast XS interface to a trie datastructure.
 
 =head2 EXPORT
 
@@ -109,19 +109,50 @@ Exports nothing.
 
 =item C<new>
 
+Constructs a new CProps::Trie instance. Takes no additional parameters.
+
 =item C<size>
+
+Returns the number of elements currently stored in the trie.
 
 =item C<add $key, $value>
 
+Adds a new key -> value mapping to the trie. C<$key> must be stringified before
+being passed to this method.  C<$value> can be either a scalar, or a reference
+to a more complex structure.  Returns true if the item was successfully added,
+or false otherwise.  Note that it is unwise to pass C<undef> as a value, since
+many of the other functions use that as a return value to indicate failure.
+
+The Trie structure requires that all keys be unique. Calling this method with a key
+which already exists will overwrite the original value.
+
 =item C<get $key>
+
+Returns the value of the specified key, or C<undef> if no entry matching the key
+is found.
 
 =item C<remove $key>
 
+Removes an entry from the trie. Returns the value removed on success, or
+C<undef> on failure.
+
+
 =item C<prefix_match $key>
+
+Returns a 2-element list containing the number of prefixes found for C<$key>, and
+the value of the longest matching prefix. Return C<(0, undef)> if no matches could
+be found.
 
 =item C<prefixes $key>
 
+Returns a list of all the values for keys in the trie which are a prefix of C<$key>.
+Returns an empty list if no matches were found.
+
 =item C<children $key>
+
+returns a list containing all entries in subtree under path given by C<$key>.
+
+B<TODO: clarify the exact behaviour here>
 
 =back
 
