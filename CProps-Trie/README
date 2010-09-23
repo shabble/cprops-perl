@@ -36,18 +36,7 @@ TODO
 
 * Make it more portable (currently has library paths hardcoded)
 ** Plunder Device::USB for setting env variables/using them in module.
-* Allow node values to be arbitrary perl types (currently just strings)
-** First stab at this, seems to work but need to check out the mem management.
-*** See below. 
-* Write POD documentation for module API
-** Stubs are in now.
 * Figure out what's necessary to place it on CPAN
 ** Need to finalise the name. 
 *** investigate <module-authors@perl.org>?
 * Figure out why keys > size for duplicate keys. Can you still access the dupe?
-* Also, (possibly related), bug: 
-  "Attempt to free unreferenced scalar: SV 0xc35550 during global destruction."
-** appears to be when removing a node whose value is a reference.
-   solution might be to provide a custom destructor function?
-*** typedef void (*cp_destructor_fn)(void *);
-   see: http://cprops.sourceforge.net/gen/docs/collection_8h.html#a18 
