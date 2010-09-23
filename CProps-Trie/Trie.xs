@@ -1,8 +1,8 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-//#include "INLINE.h"
-// stupidness with die() in props/log.h colliding with one provided by Perl.
+
+/* stupidness with die() in props/log.h colliding with one provided by Perl. */
 #undef die
 
 #include <cprops/collection.h>
@@ -27,7 +27,7 @@ char *_trie_downgrade_key(SV *key) {
     return savepvn(key_bytes, len);
 }
 
-// Docs: http://cprops.sourceforge.net/cp_trie.3.html
+/* Docs: http://cprops.sourceforge.net/cp_trie.3.html */
 
 MODULE = CProps::Trie	PACKAGE = CProps::Trie	
 
@@ -62,10 +62,10 @@ _trie_add (trie, key, val)
 	cp_trie *	trie
 	SV *	key
 	SV *	val
-PPCODE:
+PPCODE: # test comment
     char *key_copy = _trie_downgrade_key(key);
 
-    // printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val));
+    #/*  printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val)); */
 
     SvREFCNT_inc(val);
     int ret = cp_trie_add(trie, key_copy, val); 
@@ -87,7 +87,8 @@ PPCODE:
     node = (SV *)cp_trie_exact_match(trie, key_copy);
     Safefree(key_copy);
     if (node != NULL) {
-        //printf("Get: Ref count of value (%p) is: %d\n", node, SvREFCNT(node));
+     #   /* printf("Get: Ref count of value (%p) is: %d\n", node,
+     #      SvREFCNT(node)); */
         XPUSHs(node);
     } else {
         XSRETURN_UNDEF;
@@ -103,15 +104,15 @@ PPCODE:
     char *key_copy = _trie_downgrade_key(key);
     int ret = cp_trie_remove(trie, key_copy, &node);
     Safefree(key_copy);
-    /* success?! according to docs, 0 is success but code appears to show that
-     * 1 is success */
+    #/* success?! according to docs, 0 is success but code appears to show that
+    # * 1 is success */
 
     if (ret == 1) {
         if (node != NULL) {
             SV *sv_node = (SV *)node;
             XPUSHs(sv_2mortal(sv_node));
         } else {
-            // TODO: make this a croak?
+            #/* TODO: make this a croak? */
             printf("Err: Remove succeeded but node NULL\n");
             XSRETURN_UNDEF;
         }
@@ -132,11 +133,11 @@ PPCODE:
 
     if (ret) {
         SV* sv = (SV *)node;
-        XPUSHs(sv_2mortal(newSViv(ret))); // num matches
-        XPUSHs(sv);                       // nearest node.
-    } else {
-        XPUSHs(sv_2mortal(newSViv(0)));   // 0 matches
-        XPUSHs(sv_2mortal(newSV(0)));     // node is undef
+        XPUSHs(sv_2mortal(newSViv(ret))); /* num matches   */
+		XPUSHs(sv);						  /* nearest node. */
+	} else {	
+		XPUSHs(sv_2mortal(newSViv(0)));	  /* 0 matches	   */
+		XPUSHs(sv_2mortal(newSV(0)));	  /* node is undef */
     }
 
 
