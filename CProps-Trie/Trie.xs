@@ -5,9 +5,9 @@
 /* stupidness with die() in props/log.h colliding with one provided by Perl. */
 #undef die
 
-#include <cprops/collection.h>
-#include <cprops/trie.h>
-#include <cprops/vector.h>
+#include <collection.h>
+#include <trie.h>
+#include <vector.h>
 
 char *_trie_downgrade_key(SV *key);
 
