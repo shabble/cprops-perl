@@ -7,18 +7,6 @@ our $VERSION = '0.01';
 require XSLoader;
 XSLoader::load('CProps::Trie', $VERSION);
 
-# use Inline (
-#             C           => './src/cprops.c',
-#             NAME        => 'CProps::Trie',
-#             VERSION     => '0.01',
-#             TYPEMAPS    => "./src/typemap",
-#             LIBS        => '-L/opt/local/lib -lcprops',
-#             INC         => '/opt/local/include/cprops',
-#             FORCE_BUILD => 1,
-#            );
-
-# Inline->init();
-
 use MooseX::Declare;
 
 class CProps::Trie is dirty {
@@ -89,40 +77,59 @@ __END__
 
 =head1 NAME
 
-CProps::Trie - Perl interface to the I<cprops> Trie implementation
+CProps::Trie - Perl interface to the I<cprops> C-Prototypes Trie implementation
 
 =head1 SYNOPSIS
 
   use CProps::Trie;
-  ...magic happens.
+  my $trie = CProps::Trie->new;
+  $trie->add('key', 'value');
+  my $val = $trie->get('key');
+  my $removed_val = $trie->remove($key);
+
+  ... add more things ...
+
+  my @prefixes = $trie->prefixes($key);
+  my $all_keys = $trie->keys;
+
+  my $trie_size = $trie->size;
+
 
 =head1 DESCRIPTION
 
-Stub documentation for CProps::Trie, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
-
-Blah blah blah.
+This module provides a fast XS interface to a trie datastructure. 
 
 =head2 EXPORT
 
-Nothing.
+Exports nothing.
+
+=head2 METHODS
+
+=over
+
+=item C<new>
+
+=item C<size>
+
+=item C<add $key, $value>
+
+=item C<get $key>
+
+=item C<remove $key>
+
+=item C<prefix_match $key>
+
+=item C<prefixes $key>
+
+=item C<children $key>
+
+=back
 
 =head1 SEE ALSO
 
 L<http://cprops.sourceforge.net/>
 
 L<http://cprops.sourceforge.net/cp_trie.3.html>
-
-
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
 
 =head1 AUTHOR
 
