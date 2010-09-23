@@ -41,6 +41,11 @@ class CProps::Trie is dirty {
     }
 
     method add(Str $key, $val) {
+
+        if (exists $self->_keys->{$key}) {
+            $self->remove($key);
+        }
+
         my $ret = _trie_add($self->_trie, $key, $val);
         $self->_keys->{$key} = 1 if $ret;
         return $ret;
