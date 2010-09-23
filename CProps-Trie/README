@@ -17,13 +17,25 @@ To install this module type the following:
 DEPENDENCIES
 ------------
 
-This module requires these other modules and libraries:
+This module requires an  existing install of the cprops library and headers.
 
-Yes. Go see the Makefile.PL until I put them here.
+The library sources are available from:
+
+http://cprops.sourceforge.net/
+
+The Makefile.PL will search the obvious locations for these libraries, but
+you may need to specify LIBCPROPS_INCDIR and LIBCPROPS_LIBDIR environment
+variables before running the Makefile.PL script if it can't find it
+the first time.
+
+Perl Modules required:
+
+MooseX::Declare + other Moose deps.
 
 Test::More
-Inline::C
-MooseX::Declare
+Test::Exception
+Test::Valgrind (although it will just skip if you don't have it)
+
 
 COPYRIGHT AND LICENCE
 
@@ -33,12 +45,8 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
-
 TODO
 ----
-
-* Make it more portable (currently has library paths hardcoded)
-** Plunder Device::USB for setting env variables/using them in module.
 
 * Figure out what's necessary to place it on CPAN
 ** Need to finalise the name. 

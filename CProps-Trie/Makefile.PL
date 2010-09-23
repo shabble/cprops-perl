@@ -47,9 +47,6 @@ WriteMakefile(
               INC               => header_loc(),
               PREREQ_PM         => {
                                     'Test::More'        => 0,
-                                    'Inline'            => 0,
-                                    'Inline::C'         => 0,
-                                    'Inline::MakeMaker' => 0,
                                     'Carp'              => 0,
                                     'MooseX::Declare'   => 0,
                                    },
