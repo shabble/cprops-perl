@@ -14,8 +14,8 @@ If the library is not installed, you will need to install it. If it is
 installed somewhere other than /usr or /usr/local, you need to set the
 following environment variables:
 
-    LIBCPROPS_LIBDIR should contain the path to the libusb libraries
-    LIBCPROPS_INCDIR should contain the path to the libusb include files
+    LIBCPROPS_LIBDIR should contain the path to the libcprops libraries
+    LIBCPROPS_INCDIR should contain the path to the libcprops include files
 
 END
 }
@@ -85,7 +85,7 @@ sub header_found {
 sub lib_found {
     my @dirs = (
                 qw(/usr/local/lib64 /usr/lib64 /lib64 /usr/lib /usr/local/lib),
-                qw(/opt/local/lib), $ENV{LIBUSB_LIBDIR}
+                qw(/opt/local/lib), $ENV{LIBCPROPS_LIBDIR}
                );
 
     foreach my $dir (@dirs) {
