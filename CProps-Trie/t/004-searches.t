@@ -63,7 +63,29 @@ subtest 'prefixes' => sub {
 };
 
 subtest 'prefix match' => sub {
-    pass;
+
+    my $trie = new_ok 'CProps::Trie';
+
+    my @foo = qw/a b abc q efd  abcde abdce eeee x xxx xxxxy/;
+    $trie->add($_, $_) for @foo;
+
+    my ($num, $longest);
+    ok(($num, $longest) = $trie->prefix_match('xxxx'));
+    is($num, 2);
+    is($longest, 'xxx');
+
+    ok(($num, $longest) = $trie->prefix_match('ttt'));
+    is($num, 0);
+    is($longest, undef);
+
+    ok(($num, $longest) = $trie->prefix_match(''));
+    is($num, 0);
+    is($longest, undef);
+
+    ok(($num, $longest) = $trie->prefix_match('abcde'));
+    is($num, 3);
+    is($longest, 'abcde', 'exact search matches itself');
+
     done_testing;
 };
 

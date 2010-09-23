@@ -7,7 +7,7 @@ use Test::More;
 use Test::Exception;
 
 use Data::Dumper;
-# use Devel::Peek qw/Dump DumpArray/;
+use Devel::Peek qw/Dump DumpArray SvREFCNT/;
 # use Devel::FindRef;
 
 BEGIN {
@@ -78,15 +78,21 @@ subtest 'reference values' => sub {
 
 subtest 'inserting duplicate keys' => sub {
     my $trie = new_ok 'CProps::Trie';
-    ok($trie->add('x', 'first'));
-    is($trie->get('x'), 'first');
+    my $first = 'first';
+    my $second = 'second';
+    ok($trie->add('x', $first));
+    is($trie->get('x'), $first);
 
-    ok($trie->add('x', 'second'));
-    is($trie->get('x'), 'second');
+    is($trie->size, 1);
+
+    ok($trie->add('x', $second));
+    is($trie->get('x'), $second);
+    is($trie->size, 1);
 
     my $ret;
     ok($ret = $trie->remove('x'));
-    is($ret, 'second');
+    is($ret, $second);
+    is($trie->size, 0);
 
     is($trie->get('x'), undef);
 
