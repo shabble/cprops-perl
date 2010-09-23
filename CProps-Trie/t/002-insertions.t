@@ -110,15 +110,11 @@ subtest 'key with embedded nulls' => sub {
 subtest 'utf-8 keys' => sub {
     my $trie = new_ok 'CProps::Trie';
 
-    # binmode(STDOUT, ":utf8");
-    # binmode(STDERR, ":utf8");
-
     my $key = "foo\x{101}bar";
-    # diag "Key is $key";
-    # diag("Unicode?: " . (utf8::is_utf8($key) ? 1 : 0));
+
     ok($trie->add($key, 'something'));
     is($trie->get($key), 'something');
-
+    is($trie->remove($key), 'something');
 
     done_testing;
 };
