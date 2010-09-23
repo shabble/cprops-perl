@@ -8,11 +8,11 @@ use Test::Exception;
 
 use Data::Dumper;
 use Devel::Peek qw/Dump DumpArray/;
+use Devel::FindRef;
 
 BEGIN {
     use_ok 'CProps::Trie';
 }
-
 
 my $trie = new_ok 'CProps::Trie';
 

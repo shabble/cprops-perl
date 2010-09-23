@@ -9,6 +9,24 @@
 #include <cprops/trie.h>
 #include <cprops/vector.h>
 
+char *_trie_downgrade_key(SV *key);
+
+/*  returns a copy of the key transformed from UTF8 or other encodings to plain
+ *  (char *) bytes. Dies with error if the string contains embedded NUL
+ *  characters.
+ */
+
+char *_trie_downgrade_key(SV *key) {
+    STRLEN len;
+    char *key_bytes = SvPVbyte(key, len);
+    size_t c_len = strlen(key_bytes);
+
+    if (c_len != len) {
+        croak("Key cannot contain embedded NUL characters");
+    }
+    return savepvn(key_bytes, len);
+}
+
 // Docs: http://cprops.sourceforge.net/cp_trie.3.html
 
 MODULE = CProps::Trie	PACKAGE = CProps::Trie	
@@ -45,7 +63,7 @@ _trie_add (trie, key, val)
 	SV *	key
 	SV *	val
 PPCODE:
-    char *key_copy = savesvpv(key);
+    char *key_copy = _trie_downgrade_key(key);
 
     // printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val));
 
@@ -62,10 +80,12 @@ PPCODE:
 void
 _trie_exact_match (trie, key)
 	cp_trie *	trie
-	char    *	key
+	SV      *	key
 PPCODE:
     SV *node;
-    node = (SV *)cp_trie_exact_match(trie, key);
+    char *key_copy = _trie_downgrade_key(key);
+    node = (SV *)cp_trie_exact_match(trie, key_copy);
+    Safefree(key_copy);
     if (node != NULL) {
         //printf("Get: Ref count of value (%p) is: %d\n", node, SvREFCNT(node));
         XPUSHs(node);
@@ -80,8 +100,9 @@ _trie_remove (trie, key)
     SV      *	key
 PPCODE:
     void *node;
-    int ret = cp_trie_remove(trie, savesvpv(key), &node);
-
+    char *key_copy = _trie_downgrade_key(key);
+    int ret = cp_trie_remove(trie, key_copy, &node);
+    Safefree(key_copy);
     /* success?! according to docs, 0 is success but code appears to show that
      * 1 is success */
 
@@ -90,21 +111,25 @@ PPCODE:
             SV *sv_node = (SV *)node;
             XPUSHs(sv_2mortal(sv_node));
         } else {
-            printf("Remove succeeded but node NULL\n");
-            XSRETURN_NO;
+            // TODO: make this a croak?
+            printf("Err: Remove succeeded but node NULL\n");
+            XSRETURN_UNDEF;
         }
     } else {
-        printf("Remove %s failed?\n", key);
-        XSRETURN_NO;
+        XSRETURN_UNDEF;
     }
 
 void
 _trie_prefix_match (trie, prefix)
 	cp_trie *	trie
-	char *	prefix
+	SV      *	prefix
 PPCODE:
     void *node;
-    int ret = cp_trie_prefix_match(trie, prefix, &node);
+    char *prefix_copy = _trie_downgrade_key(prefix);
+
+    int ret = cp_trie_prefix_match(trie, prefix_copy, &node);
+    Safefree(prefix_copy);
+
     if (ret) {
         SV* sv = (SV *)node;
         XPUSHs(sv_2mortal(newSViv(ret))); // num matches
@@ -118,9 +143,11 @@ PPCODE:
 void
 _trie_submatch (trie, key)
 	cp_trie *	trie
-	char *	key
+	SV      *	key
 PPCODE:
-    cp_vector *v = cp_trie_submatch(trie, key);
+    char *key_copy = _trie_downgrade_key(key);
+    cp_vector *v = cp_trie_submatch(trie, key_copy);
+    Safefree(key_copy);
 
     if (v == NULL) {
         XSRETURN_EMPTY;
@@ -136,9 +163,11 @@ PPCODE:
 void
 _trie_prefixes (trie, search)
 	cp_trie *	trie
-	char *	search
+	SV      *	search
 PPCODE:
-    cp_vector *v = cp_trie_fetch_matches(trie, search);
+    char *key_copy = _trie_downgrade_key(search);
+    cp_vector *v = cp_trie_fetch_matches(trie, key_copy);
+    Safefree(key_copy);
 
     if (v == NULL) {
         XSRETURN_EMPTY;

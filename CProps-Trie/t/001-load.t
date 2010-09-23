@@ -4,8 +4,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use Test::Exception;
-
 use Data::Dumper;
 
 BEGIN {
@@ -14,7 +12,26 @@ BEGIN {
 
 
 my $trie = new_ok 'CProps::Trie';
-can_ok($trie, 'add', 'prefixes');
+my @meths = qw/add prefixes children remove get prefix_match size keys/;
+can_ok($trie, @meths);
+
+undef $trie;
+
+done_testing;
+
+__END__
+
+
+
+
+
+
+
+
+
+
+
+
 
 #my $ret = $trie->add("moo", "moo");
 #diag("Ret is $ret");
