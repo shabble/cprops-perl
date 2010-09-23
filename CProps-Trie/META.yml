@@ -12,9 +12,6 @@ build_requires:
     ExtUtils::MakeMaker:  0
 requires:
     Carp:               0
-    Inline:             0
-    Inline::C:          0
-    Inline::MakeMaker:  0
     MooseX::Declare:    0
     Test::More:         0
     Test::Exception:    0
