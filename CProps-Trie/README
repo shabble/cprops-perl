@@ -5,6 +5,7 @@ A Perl interface to the Trie data-structure provided by the cprops library
 (http://cprops.sourceforge.net/)
 
 INSTALLATION
+------------
 
 To install this module type the following:
 
@@ -14,6 +15,7 @@ To install this module type the following:
    make install
 
 DEPENDENCIES
+------------
 
 This module requires these other modules and libraries:
 
@@ -33,10 +35,11 @@ at your option, any later version of Perl 5 you may have available.
 
 
 TODO
+----
 
 * Make it more portable (currently has library paths hardcoded)
 ** Plunder Device::USB for setting env variables/using them in module.
+
 * Figure out what's necessary to place it on CPAN
 ** Need to finalise the name. 
 *** investigate <module-authors@perl.org>?
-* Figure out why keys > size for duplicate keys. Can you still access the dupe?
