@@ -19,6 +19,7 @@ SKIP: {
 
 
     my $trie = new_ok 'CProps::Trie';
+    #TODO: more here once I work ou how to use it?
 }
 
 done_testing;

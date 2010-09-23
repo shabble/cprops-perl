@@ -34,7 +34,7 @@ subtest 'children' => sub {
     my @c3 = $trie->children('');
     is_deeply(\@c3, []);
 
-    diag(Dumper(\@c3));
+#    diag(Dumper(\@c3));
 
     done_testing;
 };

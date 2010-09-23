@@ -1,0 +1,28 @@
+--- #YAML:1.0
+name:               CProps-Trie
+version:            0.01
+abstract:           Perl interface to the I<cprops> C-Prototypes Trie implementation
+author:
+    - shabble <shabble+cpan@metavore.org>
+license:            perl
+distribution_type:  module
+configure_requires:
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
+requires:
+    Carp:               0
+    Inline:             0
+    Inline::C:          0
+    Inline::MakeMaker:  0
+    MooseX::Declare:    0
+    Test::More:         0
+    Test::Exception:    0
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.55_02
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4
