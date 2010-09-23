@@ -46,6 +46,10 @@ class CProps::Trie is dirty {
         return $ret;
     }
 
+    method get(Str $key) {
+        return _trie_exact_match($self->_trie, $key);
+    }
+
     method remove(Str $key) {
         my $ret = _trie_remove($self->_trie, $key);
         delete $self->_keys->{$key} if $ret;
@@ -60,9 +64,6 @@ class CProps::Trie is dirty {
         return _trie_prefix_match($self->_trie, $key);
     }
 
-    method get(Str $key) {
-        return _trie_exact_match($self->_trie, $key);
-    }
 
     method children(Str $key) {
         return _trie_submatch($self->_trie, $key);

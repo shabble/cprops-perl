@@ -18,7 +18,7 @@ char *_trie_downgrade_key(SV *key);
 
 char *_trie_downgrade_key(SV *key) {
     STRLEN len;
-    char *key_bytes = SvPVbyte(key, len);
+    char *key_bytes = SvPVutf8(key, len);
     size_t c_len = strlen(key_bytes);
 
     if (c_len != len) {
