@@ -138,6 +138,12 @@ which already exists will overwrite the original value.
 Returns the value of the specified key, or C<undef> if no entry matching the key
 is found.
 
+=item C<keys>
+
+Returns a list of all of the keys currently stored in the trie. This list is
+stored externally to the trie (in a hash), and hence, has no reliable ordering.
+Returns an empty list if the trie is empty.
+
 =item C<remove $key>
 
 Removes an entry from the trie. Returns the value removed on success, or
@@ -158,6 +164,9 @@ Returns an empty list if no matches were found.
 =item C<children $key>
 
 returns a list containing all entries in subtree under path given by C<$key>.
+The key must contain at least one character -- you cannot use C<''> to start
+at the root. Returns an empty list if there are no children of the specified
+key.
 
 B<TODO: clarify the exact behaviour here>
 
