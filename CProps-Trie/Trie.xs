@@ -70,6 +70,9 @@ PPCODE: # test comment
     SvREFCNT_inc(val);
     int ret = cp_trie_add(trie, key_copy, val);
 
+    /* free up the key, since the trie strdups it anyway */
+    Safefree(key_copy);
+
     if (ret == 0) {
         XSRETURN_YES;
     } else {

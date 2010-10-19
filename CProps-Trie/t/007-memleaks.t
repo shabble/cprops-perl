@@ -40,12 +40,15 @@ for (1..100) {
 
         for my $char2 ('a'..'z') {
             $buf .= $char2;
-            $keysize_sum += length $buf;
+            $keysize_sum += total_size($buf);
             $trie->add($buf, $payload);
             $internal_cnt++;
         };
 
     }
+
+    $trie = undef;
+    undef $trie;
 
     my $mem = get_ps_mem_usage() * 1024;
     my $delta = $mem - $mem_last;
@@ -57,8 +60,8 @@ for (1..100) {
     diag "total keys mem: $keysize_sum";
     diag "mem/iter = " . format_bytes(int($delta/$internal_cnt));
     #$trie->DEMOLISH();
-    $trie->remove_all;
-    diag "trie size: " . $trie->size;
+    #$trie->remove_all;
+#    diag "trie size: " . $trie->size;
     diag "Loop $_";
 }
 
