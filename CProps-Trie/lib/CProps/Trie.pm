@@ -58,8 +58,8 @@ class CProps::Trie is dirty {
             $self->remove($key);
         }
 
-        my $ret = _trie_add($self->_trie, $key, $val);
-        $self->_keys->{$key} = 1 if $ret;
+        my $ret = _trie_add($self->_trie, $key, $key);
+        $self->_keys->{$key} = $val if $ret;
         return $ret;
     }
 
@@ -73,6 +73,12 @@ class CProps::Trie is dirty {
         my $ret = _trie_remove($self->_trie, $key);
         delete $self->_keys->{$key} if $ret;
         return $ret;
+
+    method remove_all() {
+        my @key_list = $self->keys;
+        foreach my $key (@key_list) {
+            $self->remove($key);
+        }
     }
 
     sub remove_all {

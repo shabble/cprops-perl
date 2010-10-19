@@ -29,7 +29,7 @@ char *_trie_downgrade_key(SV *key) {
 
 /* Docs: http://cprops.sourceforge.net/cp_trie.3.html */
 
-MODULE = CProps::Trie	PACKAGE = CProps::Trie	
+MODULE = CProps::Trie	PACKAGE = CProps::Trie
 
 PROTOTYPES: DISABLE
 
@@ -68,7 +68,7 @@ PPCODE: # test comment
     #/*  printf("Ref count of value (%p) is: %d\n", val, SvREFCNT(val)); */
 
     SvREFCNT_inc(val);
-    int ret = cp_trie_add(trie, key_copy, val); 
+    int ret = cp_trie_add(trie, key_copy, val);
 
     if (ret == 0) {
         XSRETURN_YES;
@@ -135,7 +135,7 @@ PPCODE:
         SV* sv = (SV *)node;
         XPUSHs(sv_2mortal(newSViv(ret))); /* num matches   */
 		XPUSHs(sv);						  /* nearest node. */
-	} else {	
+	} else {
 		XPUSHs(sv_2mortal(newSViv(0)));	  /* 0 matches	   */
 		XPUSHs(sv_2mortal(newSV(0)));	  /* node is undef */
     }
@@ -160,7 +160,7 @@ PPCODE:
             XPUSHs(sv);
         }
     }
- 
+
 void
 _trie_prefixes (trie, search)
 	cp_trie *	trie
