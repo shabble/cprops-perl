@@ -8,59 +8,39 @@ our $VERSION = '0.02';
 require XSLoader;
 XSLoader::load('CProps::Trie', $VERSION);
 
-use Class::XSAccessor
-    accessors => {
-        _keys => '_keys',
-        __trie => '__trie',
+use MooseX::Declare;
+
+class CProps::Trie is dirty {
+
+
+
+    has '_trie'
+      => (
+          is      => 'ro',
+          isa     => 'Ref',
+          builder => '_build_trie',
+         );
+
+    has '_keys'
+      => (
+          traits  => [qw/Hash/],
+          is      => 'ro',
+          isa     => 'HashRef',
+          default => sub { {} },
+          handles => {
+                      keys => 'keys',
+                     },
+         );
+
+    method _build_trie {
+        return _trie_create();
     }
-    ;
 
-sub _trie
-{
-    my ($self) = @_;
-
-    if (! $self->__trie()) {
-        $self->__trie($self->_build_trie());
-    }
-
-    return $self->__trie();
-}
-
-sub new
-{
-    my $class = shift;
-
-    my $self = {};
-
-    bless $self, $class;
-
-    $self->_keys({});
-
-    return $self;
-}
-
-sub _build_trie {
-    return _trie_create();
-}
-
-sub keys
-{
-    return [ keys(%{shift->_keys})];
-}
-
-    sub size {
-        my ($self) = @_;
-
+    method size() {
         return _trie_count($self->_trie);
     }
 
-    sub add {
-        my ($self, $key, $val) = @_;
-
-        if (!defined($key) or ref($key) ne "")
-        {
-            die "Key must be string";
-        }
+    method add(Str $key, $val) {
 
         if (exists $self->_keys->{$key}) {
             $self->remove($key);
@@ -71,43 +51,34 @@ sub keys
         return $ret;
     }
 
-    sub get {
-        my ($self, $key) = @_;
-
+    method get(Str $key) {
         return _trie_exact_match($self->_trie, $key);
     }
 
-    sub remove {
-        my ($self, $key) = @_;
-
+    method remove(Str $key) {
         my $ret = _trie_remove($self->_trie, $key);
         delete $self->_keys->{$key} if $ret;
         return $ret;
     }
 
-    sub prefixes {
-        my ($self, $key) = @_;
-
+    method prefixes(Str $key) {
         return _trie_prefixes($self->_trie, $key);
     }
 
-    sub prefix_match {
-        my ($self, $key) = @_;
-
+    method prefix_match(Str $key) {
         return _trie_prefix_match($self->_trie, $key);
     }
 
-    sub children {
-        my ($self, $key) = @_;
 
+    method children(Str $key) {
         return _trie_submatch($self->_trie, $key);
     }
 
-    sub DESTROY {
-        my $self = shift;
-
+    method DEMOLISH {
         _trie_destroy($self->_trie);
     }
+
+}
 
 __END__
 
