@@ -33,8 +33,8 @@ class CProps::Trie is dirty {
           isa     => 'HashRef',
           default => sub { {} },
           handles => {
-                      keys => 'keys',
-                      _clear_keys 'clear',
+                      keys        => 'keys',
+                      _clear_keys => 'clear',
                      },
          );
 
@@ -179,6 +179,9 @@ Returns an empty list if the trie is empty.
 Removes an entry from the trie. Returns the value removed on success, or
 C<undef> on failure.
 
+=item C<remove_all>
+
+Removes all entries from the trie. No useful value is returned.
 
 =item C<prefix_match $key>
 
