@@ -8,6 +8,8 @@ use Test::Exception;
 
 use Devel::Size qw/total_size/;
 use Number::Bytes::Human qw(format_bytes);
+use Time::HiRes qw/time/;
+
 # SKIP: {
 #     skip 'set $ENV{TRIE_MEMCHECK} to run this test', 2 unless $ENV{TRIE_MEMCHECK};
 
@@ -24,11 +26,12 @@ BEGIN {
 
 diag "Mem usage: " . format_bytes(get_ps_mem_usage());
 diag "pid: $$";
+my $start = time();
 
 my $payload = 'x' x 850;
-diag "Payload: ". format_bytes(total_size($payload));
-my $mem_last = 0;
-for (1..100) {
+#diag "Payload: ". format_bytes(total_size($payload));
+#my $mem_last = 0;
+for (1..1000) {
 
     my $trie = CProps::Trie->new;
 
@@ -48,27 +51,28 @@ for (1..100) {
     }
 
     $trie = undef;
-    undef $trie;
+    #undef $trie;
 
-    my $mem = get_ps_mem_usage() * 1024;
-    my $delta = $mem - $mem_last;
-    $mem_last = $mem;
+     my $mem = get_ps_mem_usage() * 1024;
+    # my $delta = $mem - $mem_last;
+    # $mem_last = $mem;
 
-    diag "Internal iterations: $internal_cnt";
-    diag "Mem usage: " . format_bytes($mem);
-    diag "Delta Mem usage: " . format_bytes($delta);
-    diag "total keys mem: $keysize_sum";
-    diag "mem/iter = " . format_bytes(int($delta/$internal_cnt));
+    # diag "Internal iterations: $internal_cnt";
+#     diag "Mem usage: " . format_bytes($mem);
+    # diag "Delta Mem usage: " . format_bytes($delta);
+    # diag "total keys mem: $keysize_sum";
+    # diag "mem/iter = " . format_bytes(int($delta/$internal_cnt));
     #$trie->DEMOLISH();
     #$trie->remove_all;
 #    diag "trie size: " . $trie->size;
-    diag "Loop $_";
+    diag "Loop $_" if $_ % 100 == 0;
 }
+my $end = time();
 
+my $len = $end - $start;
+diag "Duration: $len seconds";
 diag "done, sleeping";
 pass;
-
-sleep 10;
 
 done_testing;
 

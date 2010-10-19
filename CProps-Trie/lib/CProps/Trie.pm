@@ -9,13 +9,6 @@ class CProps::Trie {
     require XSLoader;
     XSLoader::load('CProps::Trie', $VERSION);
 
-    # Class::XSAccessor->import(accessors =>
-    #                           {
-    #                            _trie => '_trie',
-    #                            _keys => '_keys'
-    #                           },
-    #                           replace => 1);
-
     has '_trie'
       => (
           is      => 'ro',
@@ -103,14 +96,10 @@ class CProps::Trie {
 
     sub DEMOLISH {
         my $self = shift;
-        #print "Destroying Trie\n";
 
         $self->remove_all;
-        #print "done the removeall\n";
         _trie_destroy($self->_trie);
-        #print "done the destroy\n";
         $self->_clear_trie;
-        print "cleared the trie ref\n";
     }
 
 }
