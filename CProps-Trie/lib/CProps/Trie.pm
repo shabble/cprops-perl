@@ -34,6 +34,7 @@ class CProps::Trie is dirty {
           default => sub { {} },
           handles => {
                       keys => 'keys',
+                      _clear_keys 'clear',
                      },
          );
 
@@ -74,6 +75,17 @@ class CProps::Trie is dirty {
         return $ret;
     }
 
+    sub remove_all {
+        my $self = shift;
+        my @keys = $self->keys;
+
+        foreach my $k (@keys) {
+            $self->remove($k);
+        }
+
+        $self->_clear_keys;
+    }
+
     sub prefixes {
         my ($self, $key) = @_;
         return _trie_prefixes($self->_trie, $key);
@@ -92,6 +104,7 @@ class CProps::Trie is dirty {
 
     sub DEMOLISH {
         my $self = shift;
+        $self->remove_all;
         _trie_destroy($self->_trie);
     }
 
