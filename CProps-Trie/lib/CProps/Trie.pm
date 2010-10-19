@@ -1,16 +1,13 @@
 use strict;
 use warnings;
 
-package CProps::Trie;
-
-our $VERSION = '0.02';
-
-require XSLoader;
-XSLoader::load('CProps::Trie', $VERSION);
-
 use MooseX::Declare;
 
-class CProps::Trie is dirty {
+class CProps::Trie {
+
+    our $VERSION = '0.02';
+    require XSLoader;
+    XSLoader::load('CProps::Trie', $VERSION);
 
     # Class::XSAccessor->import(accessors =>
     #                           {
@@ -24,6 +21,8 @@ class CProps::Trie is dirty {
           is      => 'ro',
           isa     => 'Ref',
           builder => '_build_trie',
+          clearer => '_clear_trie',
+          lazy    => 1,
          );
 
     has '_keys'
@@ -104,8 +103,14 @@ class CProps::Trie is dirty {
 
     sub DEMOLISH {
         my $self = shift;
+        #print "Destroying Trie\n";
+
         $self->remove_all;
+        #print "done the removeall\n";
         _trie_destroy($self->_trie);
+        #print "done the destroy\n";
+        $self->_clear_trie;
+        print "cleared the trie ref\n";
     }
 
 }
