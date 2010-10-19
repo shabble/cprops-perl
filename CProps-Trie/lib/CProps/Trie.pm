@@ -12,7 +12,12 @@ use MooseX::Declare;
 
 class CProps::Trie is dirty {
 
-
+    # Class::XSAccessor->import(accessors =>
+    #                           {
+    #                            _trie => '_trie',
+    #                            _keys => '_keys'
+    #                           },
+    #                           replace => 1);
 
     has '_trie'
       => (
@@ -32,15 +37,21 @@ class CProps::Trie is dirty {
                      },
          );
 
-    method _build_trie {
+    sub _build_trie {
         return _trie_create();
     }
 
-    method size() {
+    sub size {
+        my $self = shift;
         return _trie_count($self->_trie);
     }
 
-    method add(Str $key, $val) {
+    sub add {
+        my ($self, $key, $val) = @_;
+
+        if (not defined($key) or ref($key) ne '') {
+            die "Key must be string";
+        }
 
         if (exists $self->_keys->{$key}) {
             $self->remove($key);
@@ -51,30 +62,36 @@ class CProps::Trie is dirty {
         return $ret;
     }
 
-    method get(Str $key) {
+    sub get {
+        my ($self, $key) = @_;
         return _trie_exact_match($self->_trie, $key);
     }
 
-    method remove(Str $key) {
+    sub remove {
+        my ($self, $key) = @_;
         my $ret = _trie_remove($self->_trie, $key);
         delete $self->_keys->{$key} if $ret;
         return $ret;
     }
 
-    method prefixes(Str $key) {
+    sub prefixes {
+        my ($self, $key) = @_;
         return _trie_prefixes($self->_trie, $key);
     }
 
-    method prefix_match(Str $key) {
+    sub prefix_match {
+        my ($self, $key) = @_;
         return _trie_prefix_match($self->_trie, $key);
     }
 
 
-    method children(Str $key) {
+    sub children {
+        my ($self, $key) = @_;
         return _trie_submatch($self->_trie, $key);
     }
 
-    method DEMOLISH {
+    sub DEMOLISH {
+        my $self = shift;
         _trie_destroy($self->_trie);
     }
 
@@ -169,6 +186,10 @@ at the root. Returns an empty list if there are no children of the specified
 key.
 
 B<TODO: clarify the exact behaviour here>
+
+=item C<DEMOLISH>
+
+internal function. Documented here only to keep POD::Coverage happy.
 
 =back
 
