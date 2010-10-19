@@ -3,7 +3,7 @@ use warnings;
 
 package CProps::Trie;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 require XSLoader;
 XSLoader::load('CProps::Trie', $VERSION);
